@@ -68,6 +68,16 @@ struct PaintScene
 		return pixels + y * width;
 	}
 
+	void clear()
+	{
+		if ( !pixels ) return;
+
+		for ( int i = 0; i < width * height; i++ )
+		{
+			pixels[i] = { 0, 0, 0 };
+		}
+	}
+
 	~PaintScene()
 	{
 		if ( pixels )

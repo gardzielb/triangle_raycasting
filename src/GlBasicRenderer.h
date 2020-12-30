@@ -6,17 +6,20 @@
 #define TRIANGLE_RAYCASTING_GLBASICRENDERER_H
 
 #include "Renderer.h"
-#include "GL/glew.h"
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "Camera.h"
 
 
 class GlBasicRenderer : public Renderer
 {
 private:
 	GLFWwindow * window = nullptr;
+	Camera & camera;
 
 public:
-	GlBasicRenderer( int width, int height, const std::string & title )
+	GlBasicRenderer( int width, int height, const std::string & title, Camera & camera )
+			: camera( camera )
 	{
 		if ( !glfwInit() )
 			throw std::runtime_error( "Failed to init GLFW" );
@@ -33,8 +36,11 @@ public:
 			throw std::runtime_error( "Failed to init GLEW" );
 	}
 
+
 	void renderScene( const PaintScene & scene ) override
 	{
+		processInput();
+
 		// render hear
 		glClear( GL_COLOR_BUFFER_BIT );
 
@@ -57,6 +63,19 @@ public:
 	{
 		glfwDestroyWindow( window );
 		glfwTerminate();
+	}
+
+private:
+	void processInput()
+	{
+		if ( glfwGetKey( window, GLFW_KEY_W ) == GLFW_PRESS )
+			camera.rotate( Direction::UP );
+		if ( glfwGetKey( window, GLFW_KEY_S ) == GLFW_PRESS )
+			camera.rotate( Direction::DOWN );
+		if ( glfwGetKey( window, GLFW_KEY_A ) == GLFW_PRESS )
+			camera.rotate( Direction::LEFT );
+		if ( glfwGetKey( window, GLFW_KEY_D ) == GLFW_PRESS )
+			camera.rotate( Direction::RIGHT );
 	}
 };
 

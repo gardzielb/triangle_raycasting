@@ -2,6 +2,7 @@
 #include "CpuRayCaster.h"
 #include "IndexMeshLoader.h"
 #include "GlBasicRenderer.h"
+#include "Camera.h"
 
 
 int main()
@@ -17,12 +18,13 @@ int main()
 	scene.pixels = new Color[scene.width * scene.height];
 
 	CpuRayCaster rayCaster;
-	rayCaster.paintTriangleMesh( mesh, scene, Vector3f( scene.width / 2, scene.height / 2, -400.0f ) );
-
-	GlBasicRenderer renderer( width, height, "Raycasting" );
+	Camera camera( Vector3f( width / 2, height / 2, 0.0f ), 1000.0f, 150.0f );
+	GlBasicRenderer renderer( width, height, "Raycasting", camera );
 
 	while ( renderer.isAlive() )
 	{
+		scene.clear();
+		rayCaster.paintTriangleMesh( mesh, scene, camera.getPosition() );
 		renderer.renderScene( scene );
 	}
 

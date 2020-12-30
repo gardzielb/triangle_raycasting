@@ -31,7 +31,7 @@ bool rayIntersectsTriangle( const Vector3f & rayOrigin, const Vector3f & rayVect
 	if ( t > EPSILON ) // ray intersection
 	{
 		if ( outIntersectionPoint )
-			*outIntersectionPoint = rayOrigin + rayVector * t;
+			*outIntersectionPoint = rayOrigin + t * rayVector;
 		return true;
 	} else // This means that there is a line intersection but not a ray intersection.
 		return false;

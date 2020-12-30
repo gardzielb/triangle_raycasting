@@ -23,14 +23,23 @@ public:
 		return Vector3f( x + other.x, y + other.y, z + other.z );
 	}
 
+	void operator+=( const Vector3f & other )
+	{
+		x += other.x;
+		y += other.y;
+		z += other.z;
+	}
+
 	Vector3f operator-( const Vector3f & other ) const
 	{
 		return Vector3f( x - other.x, y - other.y, z - other.z );
 	}
 
-	Vector3f operator*( float a ) const
+	void operator-=( const Vector3f & other )
 	{
-		return Vector3f( a * x, a * y, a * z );
+		x -= other.x;
+		y -= other.y;
+		z -= other.z;
 	}
 
 	Vector3f cross( const Vector3f & other ) const
@@ -73,6 +82,11 @@ public:
 		z /= len;
 	}
 };
+
+inline Vector3f operator*( float a, const Vector3f & v )
+{
+	return Vector3f( a * v.x, a * v.y, a * v.z );
+}
 
 
 #endif //RAYCASTING_VECTOR3F_CUH
