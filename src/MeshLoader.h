@@ -13,6 +13,8 @@ class MeshLoader
 {
 public:
 	virtual TriangleMesh loadMesh() = 0;
+
+	virtual ~MeshLoader() = default;
 };
 
 #endif //RAYCASTING_MESHLOADER_H
