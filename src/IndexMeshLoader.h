@@ -11,17 +11,18 @@
 class IndexMeshLoader : public MeshLoader
 {
 private:
-	std::string vertexFile, triangleFile;
+	std::string vertexFile, triangleFile, colorFile;
 
 public:
-	IndexMeshLoader( const std::string & vertexFile, const std::string & triangleFile )
-			: vertexFile( vertexFile ), triangleFile( triangleFile )
+	IndexMeshLoader( const std::string & vertexFile, const std::string & triangleFile, const std::string & colorFile )
+			: vertexFile( vertexFile ), triangleFile( triangleFile ), colorFile( colorFile )
 	{}
 
 	TriangleMesh loadMesh() override
 	{
 		std::list<Vector3f> vertexList;
 		std::list<Triangle> triangleList;
+		std::list<Color> colorList;
 
 		std::ifstream vertexStream( vertexFile );
 		std::string line;
@@ -36,20 +37,50 @@ public:
 			triangleList.push_back( readTriangle( line ) );
 		}
 
-		return createMesh( vertexList, triangleList );
+		std::ifstream colorStream( colorFile );
+		while ( getline( colorStream, line ) )
+		{
+			colorList.push_back( readColor( line ) );
+		}
+
+		return createMesh( vertexList, triangleList, colorList );
 	}
 
 private:
-	TriangleMesh createMesh( const std::list<Vector3f> & vertexList, const std::list<Triangle> & triangleList )
+	TriangleMesh createMesh( const std::list<Vector3f> & vertexList, const std::list<Triangle> & triangleList,
+							 const std::list<Color> & colorList )
 	{
 		TriangleMesh mesh( triangleList.size() );
 		mesh.vertices = new Vector3f[vertexList.size()];
 		std::copy( vertexList.begin(), vertexList.end(), mesh.vertices );
 
-		mesh.triangles = new Triangle[mesh.count];
+		mesh.triangles = new Triangle[mesh.triangleCount];
 		std::copy( triangleList.begin(), triangleList.end(), mesh.triangles );
 
+		mesh.colors = new Color[mesh.triangleCount];
+		std::copy( colorList.begin(), colorList.end(), mesh.colors );
+
 		return mesh;
+	}
+
+	Color readColor( const std::string & line )
+	{
+		int space1 = line.find( ' ' );
+		if ( space1 == std::string::npos )
+			throw std::runtime_error( "Invalid line" );
+		std::string rStr = line.substr( 0, space1 );
+		unsigned char r = std::stoi( rStr );
+
+		int space2 = line.find( ' ', space1 + 1 );
+		if ( space2 == std::string::npos )
+			throw std::runtime_error( "Invalid line" );
+		std::string gStr = line.substr( space1 + 1, space2 );
+		unsigned char g = std::stoi( gStr );
+
+		std::string bStr = line.substr( space2 + 1 );
+		unsigned char b = std::stoi( bStr );
+
+		return { r, g, b };
 	}
 
 	Triangle readTriangle( const std::string & line )

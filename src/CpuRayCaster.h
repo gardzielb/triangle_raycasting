@@ -9,13 +9,6 @@
 #include "utils.cuh"
 
 
-Color colors[] = {
-		{ 255, 0,   0 },
-		{ 0,   255, 0 },
-		{ 0,   0,   255 }
-};
-
-
 class CpuRayCaster : public RayCaster
 {
 public:
@@ -28,7 +21,7 @@ public:
 				Vector3f rayVector = Vector3f( x, y, 1.0f ) - cameraPos;
 				float minDist = MAXFLOAT;
 
-				for ( int i = 0; i < mesh.count; i++ )
+				for ( int i = 0; i < mesh.triangleCount; i++ )
 				{
 					Vector3f intersection;
 					bool isHit = rayIntersectsTriangle(
@@ -41,7 +34,7 @@ public:
 					if ( dist < minDist )
 					{
 						minDist = dist;
-						scene[y][x] = colors[i % 3];
+						scene[y][x] = mesh.colors[i];
 					}
 				}
 			}

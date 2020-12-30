@@ -18,13 +18,22 @@ struct Triangle
 };
 
 
+struct Color
+{
+	unsigned char red = 0;
+	unsigned char green = 0;
+	unsigned char blue = 0;
+};
+
+
 struct TriangleMesh
 {
 	Vector3f * vertices = nullptr;
 	Triangle * triangles = nullptr;
-	int count;
+	Color * colors = nullptr; // one color for each triangle
+	int triangleCount;
 
-	TriangleMesh( int count ) : count( count )
+	TriangleMesh( int triangleCount ) : triangleCount( triangleCount )
 	{}
 
 	TriangleMesh() : TriangleMesh( 0 )
@@ -35,14 +44,16 @@ struct TriangleMesh
 		int index = triangles[triangle][vertex];
 		return vertices[index];
 	}
-};
 
-
-struct Color
-{
-	unsigned char red = 0;
-	unsigned char green = 0;
-	unsigned char blue = 0;
+	~TriangleMesh()
+	{
+		if ( vertices )
+			delete[] vertices;
+		if ( triangles )
+			delete[] triangles;
+		if ( colors )
+			delete[] colors;
+	}
 };
 
 
@@ -55,6 +66,12 @@ struct PaintScene
 	Color * operator[]( int y )
 	{
 		return pixels + y * width;
+	}
+
+	~PaintScene()
+	{
+		if ( pixels )
+			delete[] pixels;
 	}
 };
 

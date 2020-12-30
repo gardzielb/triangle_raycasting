@@ -1,6 +1,4 @@
 #include <iostream>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include "CpuRayCaster.h"
 #include "IndexMeshLoader.h"
 #include "GlBasicRenderer.h"
@@ -10,7 +8,7 @@ int main()
 {
 	int width = 800, height = 800;
 
-	IndexMeshLoader meshLoader( "../vertices.txt", "../triangles.txt" );
+	IndexMeshLoader meshLoader( "../vertices.txt", "../triangles.txt", "../colors.txt" );
 	TriangleMesh mesh = meshLoader.loadMesh();
 
 	PaintScene scene;
@@ -27,8 +25,6 @@ int main()
 	{
 		renderer.renderScene( scene );
 	}
-
-	delete[] scene.pixels;
 
 	return 0;
 }

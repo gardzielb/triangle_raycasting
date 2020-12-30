@@ -6,6 +6,8 @@
 #define TRIANGLE_RAYCASTING_GLBASICRENDERER_H
 
 #include "Renderer.h"
+#include "GL/glew.h"
+#include <GLFW/glfw3.h>
 
 
 class GlBasicRenderer : public Renderer
