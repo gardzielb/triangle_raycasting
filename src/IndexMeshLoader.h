@@ -18,7 +18,7 @@ public:
 			: vertexFile( vertexFile ), triangleFile( triangleFile ), colorFile( colorFile )
 	{}
 
-	TriangleMesh loadMesh() override
+	TriangleMeshScopedPtr loadMesh( DestMemoryKind kind ) override
 	{
 		std::list<Vector3f> vertexList;
 		std::list<Triangle> triangleList;
@@ -43,26 +43,12 @@ public:
 			colorList.push_back( readColor( line ) );
 		}
 
-		return createMesh( vertexList, triangleList, colorList );
+		if ( kind == DestMemoryKind::CPU )
+			return makeCpuMeshScopedPtr( vertexList, triangleList, colorList );
+		return makeGpuMeshScopedPtr( vertexList, triangleList, colorList );
 	}
 
 private:
-	TriangleMesh createMesh( const std::list<Vector3f> & vertexList, const std::list<Triangle> & triangleList,
-							 const std::list<Color> & colorList )
-	{
-		TriangleMesh mesh( triangleList.size() );
-		mesh.vertices = new Vector3f[vertexList.size()];
-		std::copy( vertexList.begin(), vertexList.end(), mesh.vertices );
-
-		mesh.triangles = new Triangle[mesh.triangleCount];
-		std::copy( triangleList.begin(), triangleList.end(), mesh.triangles );
-
-		mesh.colors = new Color[mesh.triangleCount];
-		std::copy( colorList.begin(), colorList.end(), mesh.colors );
-
-		return mesh;
-	}
-
 	Color readColor( const std::string & line )
 	{
 		int space1 = line.find( ' ' );

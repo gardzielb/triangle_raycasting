@@ -11,6 +11,7 @@ struct Triangle
 {
 	int vertices[3];
 
+	__host__ __device__
 	int operator[]( int i ) const
 	{
 		return vertices[i];
@@ -39,20 +40,11 @@ struct TriangleMesh
 	TriangleMesh() : TriangleMesh( 0 )
 	{}
 
+	__host__ __device__
 	Vector3f & getVertex( int triangle, int vertex ) const
 	{
 		int index = triangles[triangle][vertex];
 		return vertices[index];
-	}
-
-	~TriangleMesh()
-	{
-		if ( vertices )
-			delete[] vertices;
-		if ( triangles )
-			delete[] triangles;
-		if ( colors )
-			delete[] colors;
 	}
 };
 
@@ -63,25 +55,10 @@ struct PaintScene
 	int width;
 	int height;
 
-	Color * operator[]( int y )
+	__host__ __device__
+	void setPixel( int x, int y, const Color & color )
 	{
-		return pixels + y * width;
-	}
-
-	void clear()
-	{
-		if ( !pixels ) return;
-
-		for ( int i = 0; i < width * height; i++ )
-		{
-			pixels[i] = { 0, 0, 0 };
-		}
-	}
-
-	~PaintScene()
-	{
-		if ( pixels )
-			delete[] pixels;
+		pixels[y * width + x] = color;
 	}
 };
 

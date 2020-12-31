@@ -2,8 +2,10 @@
 // Created by bartosz on 12/28/20.
 //
 
-#include "utils.cuh"
+#include "raycasting.cuh"
 
+
+__host__ __device__
 bool rayIntersectsTriangle( const Vector3f & rayOrigin, const Vector3f & rayVector,
 							const Vector3f & v0, const Vector3f & v1, const Vector3f & v2,
 							Vector3f * outIntersectionPoint )
@@ -35,4 +37,32 @@ bool rayIntersectsTriangle( const Vector3f & rayOrigin, const Vector3f & rayVect
 		return true;
 	} else // This means that there is a line intersection but not a ray intersection.
 		return false;
+}
+
+
+__host__ __device__
+void doRayCasting( int x, int y, const TriangleMesh * mesh, PaintScene * scene, const Vector3f & cameraPos )
+{
+	scene->setPixel( x, y, { 0, 0, 0 } );
+	Vector3f rayVector = Vector3f( x, y, 1.0f ) - cameraPos;
+	float minDist = MAXFLOAT;
+
+	for ( int i = 0; i < mesh->triangleCount; i++ )
+	{
+		Vector3f intersection;
+		bool isHit = rayIntersectsTriangle(
+				cameraPos, rayVector, mesh->getVertex( i, 0 ), mesh->getVertex( i, 1 ),
+				mesh->getVertex( i, 2 ), &intersection
+		);
+		if ( !isHit ) continue;
+
+		scene->setPixel( x, y, { 255, 0, 0 } );
+
+		float dist = intersection.distance( cameraPos );
+		if ( dist < minDist )
+		{
+			minDist = dist;
+			scene->setPixel( x, y, mesh->colors[i] );
+		}
+	}
 }
