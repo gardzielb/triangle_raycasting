@@ -41,9 +41,52 @@ bool rayIntersectsTriangle( const Vector3f & rayOrigin, const Vector3f & rayVect
 
 
 __host__ __device__
+Vector3f normalVector( const Vector3f & rayOrigin, const Vector3f & rayVector, int triangleIndex,
+					   const TriangleMesh * mesh )
+{
+	Vector3f point = rayOrigin + rayVector;
+	Vector3f u = mesh->getVertex( triangleIndex, 0 ) - point;
+	Vector3f v = mesh->getVertex( triangleIndex, 1 ) - point;
+	Vector3f normalVector = u.cross( v );
+
+	if ( (rayOrigin - normalVector).length() > rayVector.length() )
+		normalVector = (-1) * normalVector;
+
+	return normalVector.normalized();
+}
+
+
+__host__ __device__
+Color phongReflectionColor( const Vector3f & point, const Vector3f & cameraPos, const Vector3f & normalVector,
+							const LightSourceSet & lightSources, const Color & color )
+{
+	float ks = 0.4f, kd = 0.4f, ka = 0.2f, alpha = 1.0f;
+	Vector3f cameraVector = (cameraPos - point).normalized();
+	Color outColor = ka * lightSources.ambientLight;
+
+	for ( int i = 0; i < lightSources.count; i++ )
+	{
+		Vector3f lightVector = (lightSources.sources[i].position - point).normalized();
+		float lnDot = lightVector.dot( normalVector );
+		Vector3f reflectionVector = 2 * lightVector.dot( normalVector ) * normalVector - lightVector;
+		float rvDot = reflectionVector.dot( cameraVector );
+
+		Color d = kd * lnDot * lightSources.sources[i].diffuseLight;
+		Color s = ks * powf( rvDot, alpha ) * lightSources.sources[i].specularLight;
+		Color c = color * (d + s);
+		c /= 255;
+		outColor += c;
+	}
+
+	outColor /= lightSources.count;
+	return outColor;
+}
+
+
+__host__ __device__
 void doRayCasting( int x, int y, const TriangleMesh * mesh, PaintScene * scene, const Camera & camera )
 {
-	scene->setPixel( x, y, { 0, 0, 0 } );
+	scene->setPixel( x, y, Color() );
 
 	float targetX = (2 * (float) x) / scene->width - 1;
 	float targetY = (2 * (float) y) / scene->height - 1;
@@ -58,8 +101,6 @@ void doRayCasting( int x, int y, const TriangleMesh * mesh, PaintScene * scene, 
 				mesh->getVertex( i, 2 ), &intersection
 		);
 		if ( !isHit ) continue;
-
-		scene->setPixel( x, y, { 255, 0, 0 } );
 
 		float dist = intersection.distance( camera.getPosition() );
 		if ( dist < minDist )

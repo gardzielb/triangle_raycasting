@@ -66,7 +66,7 @@ private:
 		std::string bStr = line.substr( space2 + 1 );
 		unsigned char b = std::stoi( bStr );
 
-		return { r, g, b };
+		return Color( r, g, b );
 	}
 
 	Triangle readTriangle( const std::string & line )

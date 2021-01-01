@@ -5,6 +5,7 @@
 #define RAYCASTING_TRIANGLEMESH_H
 
 #include "Vector3f.cuh"
+#include "Color.cuh"
 
 
 struct Triangle
@@ -16,14 +17,6 @@ struct Triangle
 	{
 		return vertices[i];
 	}
-};
-
-
-struct Color
-{
-	unsigned char red = 0;
-	unsigned char green = 0;
-	unsigned char blue = 0;
 };
 
 
@@ -60,6 +53,34 @@ struct PaintScene
 	{
 		pixels[y * width + x] = color;
 	}
+};
+
+
+struct LightSource
+{
+	Vector3f position;
+	Color specularLight, diffuseLight;
+
+public:
+	LightSource( Vector3f position, Color specularLight, Color diffuseLight )
+			: position( std::move( position ) ), specularLight( std::move( specularLight ) ),
+			  diffuseLight( std::move( diffuseLight ) )
+	{}
+};
+
+
+struct LightSourceSet
+{
+	LightSource * sources = nullptr;
+	Color ambientLight;
+	int count = 0;
+
+	LightSourceSet()
+	{}
+
+	LightSourceSet( int count, Color ambientLight )
+			: count( count ), ambientLight( std::move( ambientLight ) )
+	{}
 };
 
 

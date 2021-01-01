@@ -5,6 +5,7 @@
 #ifndef TRIANGLE_RAYCASTING_CAMERA_CUH
 #define TRIANGLE_RAYCASTING_CAMERA_CUH
 
+#include <iostream>
 #include "Matrix3f.cuh"
 
 enum class Direction
@@ -74,6 +75,8 @@ private:
 		position = center + Vector3f(
 				rotationRadius * sinf( currentAngle ), 0.0f, rotationRadius * cosf( currentAngle )
 		);
+
+		std::cout << position << std::endl;
 	}
 };
 

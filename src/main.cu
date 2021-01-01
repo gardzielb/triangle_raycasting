@@ -24,8 +24,12 @@ int main( int argc, char ** argv )
 {
 	int width = 800, height = 800;
 	DestMemoryKind kind = enumValueOf( argv[1] );
+	std::string model = argv[2];
 
-	IndexMeshLoader meshLoader( "../vertices.txt", "../triangles.txt", "../colors.txt" );
+	IndexMeshLoader meshLoader(
+			"../models/" + model + "/vertices.txt", "../models/" + model + "/triangles.txt",
+			"../models/" + model + "/colors.txt"
+	);
 	auto meshPtr = meshLoader.loadMesh( kind );
 
 	PaintScene scene;
