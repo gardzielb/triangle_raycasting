@@ -5,6 +5,8 @@
 #ifndef RAYCASTING_VECTOR3F_CUH
 #define RAYCASTING_VECTOR3F_CUH
 
+#include <ostream>
+
 
 class Vector3f
 {
@@ -99,6 +101,12 @@ __host__ __device__
 inline Vector3f operator*( float a, const Vector3f & v )
 {
 	return Vector3f( a * v.x, a * v.y, a * v.z );
+}
+
+inline std::ostream & operator<<( std::ostream & stream, const Vector3f & v )
+{
+	stream << "[" << v.x << ", " << v.y << ", " << v.z << "]";
+	return stream;
 }
 
 

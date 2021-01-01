@@ -2,7 +2,7 @@
 #include "CpuRayCaster.h"
 #include "IndexMeshLoader.h"
 #include "GlBasicRenderer.h"
-#include "Camera.h"
+#include "Camera.cuh"
 #include "GpuRayCaster.cuh"
 
 
@@ -35,12 +35,12 @@ int main( int argc, char ** argv )
 
 	RayCaster * rayCaster = createRayCaster( kind, width, height );
 
-	Camera camera( Vector3f( width / 2, height / 2, 0.0f ), 1000.0f, 150.0f );
+	Camera camera( Vector3f( 0.0f, 0.0f, 0.0f ), 1.0f, 0.1f );
 	GlBasicRenderer renderer( width, height, "Raycasting", camera );
 
 	while ( renderer.isAlive() )
 	{
-		rayCaster->paintTriangleMesh( meshPtr, scene, camera.getPosition() );
+		rayCaster->paintTriangleMesh( meshPtr, scene, camera );
 		renderer.renderScene( scene );
 	}
 

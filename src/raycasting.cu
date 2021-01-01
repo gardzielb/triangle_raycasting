@@ -41,24 +41,27 @@ bool rayIntersectsTriangle( const Vector3f & rayOrigin, const Vector3f & rayVect
 
 
 __host__ __device__
-void doRayCasting( int x, int y, const TriangleMesh * mesh, PaintScene * scene, const Vector3f & cameraPos )
+void doRayCasting( int x, int y, const TriangleMesh * mesh, PaintScene * scene, const Camera & camera )
 {
 	scene->setPixel( x, y, { 0, 0, 0 } );
-	Vector3f rayVector = Vector3f( x, y, 1.0f ) - cameraPos;
+
+	float targetX = (2 * (float) x) / scene->width - 1;
+	float targetY = (2 * (float) y) / scene->height - 1;
+	Vector3f rayVector = camera.emitRay( targetX, targetY );
 	float minDist = MAXFLOAT;
 
 	for ( int i = 0; i < mesh->triangleCount; i++ )
 	{
 		Vector3f intersection;
 		bool isHit = rayIntersectsTriangle(
-				cameraPos, rayVector, mesh->getVertex( i, 0 ), mesh->getVertex( i, 1 ),
+				camera.getPosition(), rayVector, mesh->getVertex( i, 0 ), mesh->getVertex( i, 1 ),
 				mesh->getVertex( i, 2 ), &intersection
 		);
 		if ( !isHit ) continue;
 
 		scene->setPixel( x, y, { 255, 0, 0 } );
 
-		float dist = intersection.distance( cameraPos );
+		float dist = intersection.distance( camera.getPosition() );
 		if ( dist < minDist )
 		{
 			minDist = dist;

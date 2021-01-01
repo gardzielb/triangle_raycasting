@@ -7,6 +7,7 @@
 
 #include "Vector3f.cuh"
 #include "TriangleMesh.h"
+#include "Camera.cuh"
 
 __host__ __device__
 bool rayIntersectsTriangle( const Vector3f & rayOrigin, const Vector3f & rayVector,
@@ -14,6 +15,7 @@ bool rayIntersectsTriangle( const Vector3f & rayOrigin, const Vector3f & rayVect
 							Vector3f * outIntersectionPoint );
 
 __host__ __device__
-void doRayCasting( int x, int y, const TriangleMesh * mesh, PaintScene * scene, const Vector3f & cameraPos );
+void doRayCasting( int x, int y, const TriangleMesh * mesh, PaintScene * scene, const Camera & camera );
+
 
 #endif //RAYCASTING_UTILS_CUH

@@ -7,13 +7,14 @@
 
 #include "TriangleMeshScopedPtr.cuh"
 #include "TriangleMesh.h"
+#include "Camera.cuh"
 
 
 class RayCaster
 {
 public:
 	virtual void paintTriangleMesh( const TriangleMeshScopedPtr & meshPtr, PaintScene & scene,
-									const Vector3f & cameraPos ) = 0;
+									const Camera & camera ) = 0;
 
 	virtual ~RayCaster() = default;
 };
