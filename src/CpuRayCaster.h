@@ -11,7 +11,14 @@
 
 class CpuRayCaster : public RayCaster
 {
+private:
+	LightSourceSet lightSources;
+
 public:
+	CpuRayCaster( LightSourceSet lightSources )
+			: lightSources( std::move( lightSources ) )
+	{}
+
 	void paintTriangleMesh( const TriangleMeshScopedPtr & meshPtr, PaintScene & scene,
 							const Camera & camera ) override
 	{
@@ -19,7 +26,7 @@ public:
 		{
 			for ( int y = 0; y < scene.height; y++ )
 			{
-				doRayCasting( x, y, meshPtr.getMesh(), &scene, camera );
+				doRayCasting( x, y, meshPtr.getMesh(), &scene, camera, lightSources );
 			}
 		}
 	}

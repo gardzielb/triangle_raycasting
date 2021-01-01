@@ -41,14 +41,14 @@ bool rayIntersectsTriangle( const Vector3f & rayOrigin, const Vector3f & rayVect
 
 
 __host__ __device__
-Vector3f normalVector( const Vector3f & rayOrigin, const Vector3f & rayVector, int triangleIndex,
+Vector3f normalVector( const Vector3f & point, const Vector3f & rayOrigin, int triangleIndex,
 					   const TriangleMesh * mesh )
 {
-	Vector3f point = rayOrigin + rayVector;
 	Vector3f u = mesh->getVertex( triangleIndex, 0 ) - point;
 	Vector3f v = mesh->getVertex( triangleIndex, 1 ) - point;
 	Vector3f normalVector = u.cross( v );
 
+	Vector3f rayVector = point - rayOrigin;
 	if ( (rayOrigin - normalVector).length() > rayVector.length() )
 		normalVector = (-1) * normalVector;
 
@@ -60,7 +60,7 @@ __host__ __device__
 Color phongReflectionColor( const Vector3f & point, const Vector3f & cameraPos, const Vector3f & normalVector,
 							const LightSourceSet & lightSources, const Color & color )
 {
-	float ks = 0.4f, kd = 0.4f, ka = 0.2f, alpha = 1.0f;
+	float ks = 0.33f, kd = 0.33f, ka = 0.33f, alpha = 50.0f;
 	Vector3f cameraVector = (cameraPos - point).normalized();
 	Color outColor = ka * lightSources.ambientLight;
 
@@ -71,27 +71,29 @@ Color phongReflectionColor( const Vector3f & point, const Vector3f & cameraPos, 
 		Vector3f reflectionVector = 2 * lightVector.dot( normalVector ) * normalVector - lightVector;
 		float rvDot = reflectionVector.dot( cameraVector );
 
-		Color d = kd * lnDot * lightSources.sources[i].diffuseLight;
-		Color s = ks * powf( rvDot, alpha ) * lightSources.sources[i].specularLight;
-		Color c = color * (d + s);
-		c /= 255;
-		outColor += c;
+		Color d = kd * lnDot * lightSources[i].diffuseLight;
+		Color s = ks * powf( rvDot, alpha ) * lightSources[i].specularLight;
+		outColor += (d + s);
 	}
 
 	outColor /= lightSources.count;
-	return outColor;
+	return (1.0f / 255) * color * outColor;
 }
 
 
 __host__ __device__
-void doRayCasting( int x, int y, const TriangleMesh * mesh, PaintScene * scene, const Camera & camera )
+void doRayCasting( int x, int y, const TriangleMesh * mesh, PaintScene * scene, const Camera & camera,
+				   const LightSourceSet & lightSources )
 {
 	scene->setPixel( x, y, Color() );
 
 	float targetX = (2 * (float) x) / scene->width - 1;
 	float targetY = (2 * (float) y) / scene->height - 1;
 	Vector3f rayVector = camera.emitRay( targetX, targetY );
+
 	float minDist = MAXFLOAT;
+	Vector3f closestIntersection;
+	int triangleIndex = -1;
 
 	for ( int i = 0; i < mesh->triangleCount; i++ )
 	{
@@ -106,7 +108,17 @@ void doRayCasting( int x, int y, const TriangleMesh * mesh, PaintScene * scene, 
 		if ( dist < minDist )
 		{
 			minDist = dist;
-			scene->setPixel( x, y, mesh->colors[i] );
+			triangleIndex = i;
+			closestIntersection = intersection;
 		}
+	}
+
+	if ( triangleIndex >= 0 )
+	{
+		Vector3f vNormal = normalVector( closestIntersection, camera.getPosition(), triangleIndex, mesh );
+		Color color = phongReflectionColor(
+				closestIntersection, camera.getPosition(), vNormal, lightSources, mesh->colors[triangleIndex]
+		);
+		scene->setPixel( x, y, color );
 	}
 }

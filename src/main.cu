@@ -12,11 +12,11 @@ static DestMemoryKind enumValueOf( const std::string & str )
 }
 
 
-static RayCaster * createRayCaster( DestMemoryKind kind, int width, int height )
+static RayCaster * createRayCaster( DestMemoryKind kind, int width, int height, LightSourceSet & lightSourceSet )
 {
 	if ( kind == DestMemoryKind::GPU )
-		return new GpuRayCaster( width, height );
-	return new CpuRayCaster;
+		return new GpuRayCaster( width, height, lightSourceSet );
+	return new CpuRayCaster( lightSourceSet );
 }
 
 
@@ -37,7 +37,13 @@ int main( int argc, char ** argv )
 	scene.width = width;
 	scene.pixels = new Color[scene.width * scene.height];
 
-	RayCaster * rayCaster = createRayCaster( kind, width, height );
+	LightSourceSet lightSources( 1, Color( 255, 255, 255 ) );
+	lightSources.sources = new LightSource[lightSources.count];
+	lightSources[0] = LightSource(
+			Vector3f( 0.0f, 0.5f, 1.0f ), Color( 255, 255, 255 ), Color( 255, 255, 255 )
+	);
+
+	RayCaster * rayCaster = createRayCaster( kind, width, height, lightSources );
 
 	Camera camera( Vector3f( 0.0f, 0.0f, 0.0f ), 1.0f, 0.1f );
 	GlBasicRenderer renderer( width, height, "Raycasting", camera );
@@ -49,6 +55,7 @@ int main( int argc, char ** argv )
 	}
 
 	delete rayCaster;
+	delete[] lightSources.sources;
 	delete[] scene.pixels;
 	return 0;
 }

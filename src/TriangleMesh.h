@@ -66,6 +66,9 @@ public:
 			: position( std::move( position ) ), specularLight( std::move( specularLight ) ),
 			  diffuseLight( std::move( diffuseLight ) )
 	{}
+
+	LightSource() : LightSource( Vector3f(), Color(), Color() )
+	{}
 };
 
 
@@ -81,6 +84,12 @@ struct LightSourceSet
 	LightSourceSet( int count, Color ambientLight )
 			: count( count ), ambientLight( std::move( ambientLight ) )
 	{}
+
+	__host__ __device__
+	LightSource & operator[]( int i ) const
+	{
+		return sources[i];
+	}
 };
 
 

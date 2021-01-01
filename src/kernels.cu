@@ -7,7 +7,8 @@
 
 
 __global__
-void rayCastingKernel( const TriangleMesh * mesh, PaintScene * scene, const Camera * camera )
+void rayCastingKernel( const TriangleMesh * mesh, PaintScene * scene, const Camera * camera,
+					   const LightSourceSet * lightSources )
 {
 	int x = blockIdx.x * blockDim.x + threadIdx.x;
 	if ( x >= scene->width ) return;
@@ -15,5 +16,5 @@ void rayCastingKernel( const TriangleMesh * mesh, PaintScene * scene, const Came
 	int y = blockIdx.y * blockDim.y + threadIdx.y;
 	if ( y >= scene->height ) return;
 
-	doRayCasting( x, y, mesh, scene, *camera );
+	doRayCasting( x, y, mesh, scene, *camera, *lightSources );
 }

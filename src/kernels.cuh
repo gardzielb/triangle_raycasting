@@ -10,6 +10,7 @@
 #define TRIANGLE_RAYCASTING_KERNELS_CUH
 
 __global__
-void rayCastingKernel( const TriangleMesh * mesh, PaintScene * scene, const Camera * camera );
+void rayCastingKernel( const TriangleMesh * mesh, PaintScene * scene, const Camera * camera,
+					   const LightSourceSet * lightSources );
 
 #endif //TRIANGLE_RAYCASTING_KERNELS_CUH

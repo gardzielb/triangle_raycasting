@@ -15,7 +15,8 @@ bool rayIntersectsTriangle( const Vector3f & rayOrigin, const Vector3f & rayVect
 							Vector3f * outIntersectionPoint );
 
 __host__ __device__
-void doRayCasting( int x, int y, const TriangleMesh * mesh, PaintScene * scene, const Camera & camera );
+void doRayCasting( int x, int y, const TriangleMesh * mesh, PaintScene * scene, const Camera & camera,
+				   const LightSourceSet & lightSources );
 
 
 #endif //RAYCASTING_UTILS_CUH

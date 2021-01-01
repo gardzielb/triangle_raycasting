@@ -16,11 +16,13 @@ private:
 	PaintScene * gpuScene = nullptr;
 	Color * gpuPixels = nullptr;
 	Camera * gpuCamera = nullptr;
+	LightSourceSet * gpuLightSourceSet = nullptr;
+	LightSource * gpuLightSources = nullptr;
 	dim3 threadsPerBlock;
 	dim3 blockCount;
 
 public:
-	GpuRayCaster( int sceneWidth, int sceneHeight )
+	GpuRayCaster( int sceneWidth, int sceneHeight, const LightSourceSet & lightSources )
 	{
 		checkCudaErrors( cudaSetDevice( 0 ) );
 
@@ -40,6 +42,19 @@ public:
 		checkCudaErrors( cudaMemcpy( gpuScene, &tmpScene, sizeof( PaintScene ), cudaMemcpyHostToDevice ) );
 
 		checkCudaErrors( cudaMalloc( (void **) &gpuCamera, sizeof( Camera ) ) );
+
+		checkCudaErrors( cudaMalloc( (void **) &gpuLightSources, lightSources.count * sizeof( LightSource ) ) );
+		checkCudaErrors( cudaMemcpy(
+				gpuLightSources, lightSources.sources, lightSources.count * sizeof( LightSource ),
+				cudaMemcpyHostToDevice
+		) );
+
+		LightSourceSet tmpLightSourceSet( lightSources.count, lightSources.ambientLight );
+		tmpLightSourceSet.sources = gpuLightSources;
+		checkCudaErrors( cudaMalloc( (void **) &gpuLightSourceSet, sizeof( LightSourceSet ) ) );
+		checkCudaErrors(
+				cudaMemcpy( gpuLightSourceSet, &tmpLightSourceSet, sizeof( LightSourceSet ), cudaMemcpyHostToDevice )
+		);
 	}
 
 	void paintTriangleMesh( const TriangleMeshScopedPtr & meshPtr, PaintScene & scene,
@@ -50,7 +65,7 @@ public:
 
 		checkCudaErrors( cudaMemcpy( gpuCamera, &camera, sizeof( Camera ), cudaMemcpyHostToDevice ) );
 
-		rayCastingKernel<<<blockCount, threadsPerBlock>>>( meshPtr.getMesh(), gpuScene, gpuCamera );
+		rayCastingKernel<<<blockCount, threadsPerBlock>>>( meshPtr.getMesh(), gpuScene, gpuCamera, gpuLightSourceSet );
 
 		cudaError_t error = cudaGetLastError();
 		if ( error != cudaSuccess )
@@ -64,6 +79,8 @@ public:
 
 	~GpuRayCaster()
 	{
+		cudaFree( gpuLightSourceSet );
+		cudaFree( gpuLightSources );
 		cudaFree( gpuCamera );
 		cudaFree( gpuScene );
 		cudaFree( gpuPixels );
