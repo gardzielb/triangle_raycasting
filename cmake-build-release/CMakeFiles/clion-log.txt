@@ -1,4 +1,0 @@
-/home/bartosz/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/203.6682.181/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CUDA_COMPILER=/usr/local/cuda/bin/nvcc -G "CodeBlocks - Unix Makefiles" /home/bartosz/Documents/CLionProjects/triangle_raycasting
--- Configuring done
--- Generating done
--- Build files have been written to: /home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release
