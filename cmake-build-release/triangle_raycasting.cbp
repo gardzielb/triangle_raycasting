@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="triangle_raycasting"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j12 -f &quot;/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/gmake -j12 -f &quot;/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j12 -f &quot;/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j12 -f &quot;/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j12 -f &quot;/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/gmake -j12 -f &quot;/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j12 -f &quot;/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j12 -f &quot;/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j12 -f &quot;/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/gmake -j12 -f &quot;/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j12 -f &quot;/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j12 -f &quot;/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="triangle_raycasting">
+				<Option output="/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release/triangle_raycasting" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/10/../../../../include/c++/10"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/10/../../../../include/c++/10/x86_64-redhat-linux"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/10/../../../../include/c++/10/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/10/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j12 -f &quot;/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release/Makefile&quot;  VERBOSE=1 triangle_raycasting"/>
+					<CompileFile command="/usr/bin/gmake -j12 -f &quot;/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j12 -f &quot;/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j12 -f &quot;/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="triangle_raycasting/fast">
+				<Option output="/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release/triangle_raycasting" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/10/../../../../include/c++/10"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/10/../../../../include/c++/10/x86_64-redhat-linux"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/10/../../../../include/c++/10/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-redhat-linux/10/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j12 -f &quot;/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release/Makefile&quot;  VERBOSE=1 triangle_raycasting/fast"/>
+					<CompileFile command="/usr/bin/gmake -j12 -f &quot;/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j12 -f &quot;/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j12 -f &quot;/home/bartosz/Documents/CLionProjects/triangle_raycasting/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/Camera.cuh">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/CleanupCommand.cuh">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/Color.cuh">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/CpuRayCaster.h">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/GlBasicRenderer.h">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/GpuRayCaster.cuh">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/IndexMeshLoader.h">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/LightsLoader.h">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/Matrix3f.cuh">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/MeshLoader.h">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/RayCaster.h">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/Renderer.h">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/SimpleLightsLoader.h">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/TriangleMesh.h">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/TriangleMeshScopedPtr.cuh">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/Vector3f.cuh">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/kernels.cu">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/kernels.cuh">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/main.cu">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/raycasting.cu">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/raycasting.cuh">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/readFileUtils.cpp">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/src/readFileUtils.h">
+			<Option target="triangle_raycasting"/>
+		</Unit>
+		<Unit filename="/home/bartosz/Documents/CLionProjects/triangle_raycasting/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

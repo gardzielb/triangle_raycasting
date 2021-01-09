@@ -75,8 +75,6 @@ private:
 		position = center + Vector3f(
 				rotationRadius * sinf( currentAngle ), 0.0f, rotationRadius * cosf( currentAngle )
 		);
-
-		std::cout << position << std::endl;
 	}
 };
 

@@ -8,6 +8,12 @@
 #include "Color.cuh"
 
 
+enum class DestMemoryKind
+{
+	CPU, GPU
+};
+
+
 struct Triangle
 {
 	int vertices[3];

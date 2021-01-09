@@ -7,19 +7,13 @@
 
 #include <fstream>
 #include <list>
-#include "TriangleMeshScopedPtr.cuh"
-
-
-enum class DestMemoryKind
-{
-	CPU, GPU
-};
+#include "ScopedPtr.cuh"
 
 
 class MeshLoader
 {
 public:
-	virtual TriangleMeshScopedPtr loadMesh( DestMemoryKind kind ) = 0;
+	virtual ScopedPtr<TriangleMesh> loadMesh( DestMemoryKind kind ) = 0;
 
 	virtual ~MeshLoader() = default;
 };

@@ -35,24 +35,30 @@ bool rayIntersectsTriangle( const Vector3f & rayOrigin, const Vector3f & rayVect
 		if ( outIntersectionPoint )
 			*outIntersectionPoint = rayOrigin + t * rayVector;
 		return true;
-	} else // This means that there is a line intersection but not a ray intersection.
+	}
+	else // This means that there is a line intersection but not a ray intersection.
 		return false;
 }
 
 
 __host__ __device__
-Vector3f normalVector( const Vector3f & point, const Vector3f & rayOrigin, int triangleIndex,
+Vector3f normalVector( const Vector3f & rayOrigin, const Vector3f & point, int triangleIndex,
 					   const TriangleMesh * mesh )
 {
-	Vector3f u = mesh->getVertex( triangleIndex, 0 ) - point;
-	Vector3f v = mesh->getVertex( triangleIndex, 1 ) - point;
-	Vector3f normalVector = u.cross( v );
+	Vector3f p0 = mesh->getVertex( triangleIndex, 0 );
+	Vector3f u = mesh->getVertex( triangleIndex, 1 ) - p0;
+	Vector3f v = mesh->getVertex( triangleIndex, 2 ) - p0;
+	Vector3f normalVector = u.cross( v ).normalized();
 
-	Vector3f rayVector = point - rayOrigin;
-	if ( (rayOrigin - normalVector).length() > rayVector.length() )
+	Vector3f rayVector = rayOrigin - point;
+	if ( rayVector.normalized().dot( normalVector ) < 0 )
 		normalVector = (-1) * normalVector;
 
-	return normalVector.normalized();
+//	if ( u.length() > 0.1 && v.length() > 0.1 )
+//		printf( "dupa\n" );
+
+	return normalVector;
+//	return Vector3f( 0.0f, 0.0f, -1.0f );
 }
 
 
@@ -66,9 +72,9 @@ Color phongReflectionColor( const Vector3f & point, const Vector3f & cameraPos, 
 
 	for ( int i = 0; i < lightSources.count; i++ )
 	{
-		Vector3f lightVector = (lightSources.sources[i].position - point).normalized();
+		Vector3f lightVector = (lightSources[i].position - point).normalized();
 		float lnDot = lightVector.dot( normalVector );
-		Vector3f reflectionVector = 2 * lightVector.dot( normalVector ) * normalVector - lightVector;
+		Vector3f reflectionVector = 2 * lnDot * normalVector - lightVector;
 		float rvDot = reflectionVector.dot( cameraVector );
 
 		Color d = kd * lnDot * lightSources[i].diffuseLight;
@@ -115,7 +121,7 @@ void doRayCasting( int x, int y, const TriangleMesh * mesh, PaintScene * scene, 
 
 	if ( triangleIndex >= 0 )
 	{
-		Vector3f vNormal = normalVector( closestIntersection, camera.getPosition(), triangleIndex, mesh );
+		Vector3f vNormal = normalVector( camera.getPosition(), closestIntersection, triangleIndex, mesh );
 		Color color = phongReflectionColor(
 				closestIntersection, camera.getPosition(), vNormal, lightSources, mesh->colors[triangleIndex]
 		);

@@ -4,6 +4,7 @@
 #include "GlBasicRenderer.h"
 #include "Camera.cuh"
 #include "GpuRayCaster.cuh"
+#include "SimpleLightsLoader.h"
 
 
 static DestMemoryKind enumValueOf( const std::string & str )
@@ -12,11 +13,11 @@ static DestMemoryKind enumValueOf( const std::string & str )
 }
 
 
-static RayCaster * createRayCaster( DestMemoryKind kind, int width, int height, LightSourceSet & lightSourceSet )
+static RayCaster * createRayCaster( DestMemoryKind kind, int width, int height )
 {
 	if ( kind == DestMemoryKind::GPU )
-		return new GpuRayCaster( width, height, lightSourceSet );
-	return new CpuRayCaster( lightSourceSet );
+		return new GpuRayCaster( width, height );
+	return new CpuRayCaster();
 }
 
 
@@ -37,25 +38,21 @@ int main( int argc, char ** argv )
 	scene.width = width;
 	scene.pixels = new Color[scene.width * scene.height];
 
-	LightSourceSet lightSources( 1, Color( 255, 255, 255 ) );
-	lightSources.sources = new LightSource[lightSources.count];
-	lightSources[0] = LightSource(
-			Vector3f( 0.0f, 0.5f, 1.0f ), Color( 255, 255, 255 ), Color( 255, 255, 255 )
-	);
+	SimpleLightsLoader lightsLoader( "../lights.txt" );
+	auto lightsPtr = lightsLoader.loadLights( kind );
 
-	RayCaster * rayCaster = createRayCaster( kind, width, height, lightSources );
+	RayCaster * rayCaster = createRayCaster( kind, width, height );
 
-	Camera camera( Vector3f( 0.0f, 0.0f, 0.0f ), 1.0f, 0.1f );
+	Camera camera( Vector3f( 0.0f, 0.0f, 0.0f ), 3.0f, 0.1f );
 	GlBasicRenderer renderer( width, height, "Raycasting", camera );
 
 	while ( renderer.isAlive() )
 	{
-		rayCaster->paintTriangleMesh( meshPtr, scene, camera );
+		rayCaster->paintTriangleMesh( meshPtr, lightsPtr, scene, camera );
 		renderer.renderScene( scene );
 	}
 
 	delete rayCaster;
-	delete[] lightSources.sources;
 	delete[] scene.pixels;
 	return 0;
 }

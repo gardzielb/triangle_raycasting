@@ -22,17 +22,22 @@ template<typename T>
 class HostCleanupCommand : public CleanupCommand
 {
 private:
-	T * array = nullptr;
+	T * ptr = nullptr;
+	bool isArray = false;
 
 public:
-	explicit HostCleanupCommand( T * array )
+	explicit HostCleanupCommand( T * ptr, bool isArray )
+			: isArray( isArray )
 	{
-		this->array = array;
+		this->ptr = ptr;
 	}
 
 	void execute() override
 	{
-		delete array;
+		if ( isArray )
+			delete[] ptr;
+		else
+			delete ptr;
 	}
 };
 

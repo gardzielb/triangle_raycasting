@@ -35,6 +35,13 @@ public:
 	}
 
 	__host__ __device__
+	inline Color operator/( float a ) const
+	{
+		return Color( red / a, green / a, blue / a );
+	}
+
+
+	__host__ __device__
 	inline Color & operator+=( const Color & other )
 	{
 		this->red += other.red;

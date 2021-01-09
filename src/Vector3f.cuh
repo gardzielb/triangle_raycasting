@@ -90,7 +90,7 @@ public:
 	void normalize()
 	{
 		float len = length();
-		if ( len < 0.00001 ) return;
+		if ( !len ) return;
 		x /= len;
 		y /= len;
 		z /= len;

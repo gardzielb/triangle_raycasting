@@ -6,6 +6,7 @@
 #define RAYCASTING_INDEXMESHLOADER_H
 
 #include "MeshLoader.h"
+#include "readFileUtils.h"
 
 
 class IndexMeshLoader : public MeshLoader
@@ -18,7 +19,7 @@ public:
 			: vertexFile( vertexFile ), triangleFile( triangleFile ), colorFile( colorFile )
 	{}
 
-	TriangleMeshScopedPtr loadMesh( DestMemoryKind kind ) override
+	ScopedPtr<TriangleMesh> loadMesh( DestMemoryKind kind ) override
 	{
 		std::list<Vector3f> vertexList;
 		std::list<Triangle> triangleList;
@@ -30,83 +31,25 @@ public:
 		{
 			vertexList.push_back( readVertex( line ) );
 		}
+		vertexStream.close();
 
 		std::ifstream triangleStream( triangleFile );
 		while ( getline( triangleStream, line ) )
 		{
 			triangleList.push_back( readTriangle( line ) );
 		}
+		triangleStream.close();
 
 		std::ifstream colorStream( colorFile );
 		while ( getline( colorStream, line ) )
 		{
 			colorList.push_back( readColor( line ) );
 		}
+		colorStream.close();
 
 		if ( kind == DestMemoryKind::CPU )
 			return makeCpuMeshScopedPtr( vertexList, triangleList, colorList );
 		return makeGpuMeshScopedPtr( vertexList, triangleList, colorList );
-	}
-
-private:
-	Color readColor( const std::string & line )
-	{
-		int space1 = line.find( ' ' );
-		if ( space1 == std::string::npos )
-			throw std::runtime_error( "Invalid line" );
-		std::string rStr = line.substr( 0, space1 );
-		unsigned char r = std::stoi( rStr );
-
-		int space2 = line.find( ' ', space1 + 1 );
-		if ( space2 == std::string::npos )
-			throw std::runtime_error( "Invalid line" );
-		std::string gStr = line.substr( space1 + 1, space2 );
-		unsigned char g = std::stoi( gStr );
-
-		std::string bStr = line.substr( space2 + 1 );
-		unsigned char b = std::stoi( bStr );
-
-		return Color( r, g, b );
-	}
-
-	Triangle readTriangle( const std::string & line )
-	{
-		int space1 = line.find( ' ' );
-		if ( space1 == std::string::npos )
-			throw std::runtime_error( "Invalid line" );
-		std::string aStr = line.substr( 0, space1 );
-		int a = std::stoi( aStr );
-
-		int space2 = line.find( ' ', space1 + 1 );
-		if ( space2 == std::string::npos )
-			throw std::runtime_error( "Invalid line" );
-		std::string bStr = line.substr( space1 + 1, space2 );
-		int b = std::stoi( bStr );
-
-		std::string cStr = line.substr( space2 + 1 );
-		int c = std::stoi( cStr );
-
-		return { a, b, c };
-	}
-
-	Vector3f readVertex( const std::string & line )
-	{
-		int space1 = line.find( ' ' );
-		if ( space1 == std::string::npos )
-			throw std::runtime_error( "Invalid line" );
-		std::string xStr = line.substr( 0, space1 );
-		float x = std::stof( xStr );
-
-		int space2 = line.find( ' ', space1 + 1 );
-		if ( space2 == std::string::npos )
-			throw std::runtime_error( "Invalid line" );
-		std::string yStr = line.substr( space1 + 1, space2 );
-		float y = std::stof( yStr );
-
-		std::string zStr = line.substr( space2 + 1 );
-		float z = std::stof( zStr );
-
-		return Vector3f( x, y, z );
 	}
 };
 
