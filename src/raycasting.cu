@@ -54,11 +54,7 @@ Vector3f normalVector( const Vector3f & rayOrigin, const Vector3f & point, int t
 	if ( rayVector.normalized().dot( normalVector ) < 0 )
 		normalVector = (-1) * normalVector;
 
-//	if ( u.length() > 0.1 && v.length() > 0.1 )
-//		printf( "dupa\n" );
-
 	return normalVector;
-//	return Vector3f( 0.0f, 0.0f, -1.0f );
 }
 
 
@@ -66,7 +62,7 @@ __host__ __device__
 Color phongReflectionColor( const Vector3f & point, const Vector3f & cameraPos, const Vector3f & normalVector,
 							const LightSourceSet & lightSources, const Color & color )
 {
-	float ks = 0.33f, kd = 0.33f, ka = 0.33f, alpha = 50.0f;
+	float ks = 0.33f, kd = 0.33f, ka = 0.33f, alpha = 10.0f;
 	Vector3f cameraVector = (cameraPos - point).normalized();
 	Color outColor = ka * lightSources.ambientLight;
 
@@ -82,7 +78,7 @@ Color phongReflectionColor( const Vector3f & point, const Vector3f & cameraPos, 
 		outColor += (d + s);
 	}
 
-	outColor /= lightSources.count;
+	outColor.shrink();
 	return (1.0f / 255) * color * outColor;
 }
 

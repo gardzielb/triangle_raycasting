@@ -23,6 +23,14 @@ public:
 	{}
 
 	__host__ __device__
+	inline void shrink()
+	{
+		red = min( red, 255 );
+		green = min( green, 255 );
+		blue = min( blue, 255 );
+	}
+
+	__host__ __device__
 	inline Color operator+( const Color & other ) const
 	{
 		return Color( red + other.red, green + other.green, blue + other.blue );
@@ -39,7 +47,6 @@ public:
 	{
 		return Color( red / a, green / a, blue / a );
 	}
-
 
 	__host__ __device__
 	inline Color & operator+=( const Color & other )

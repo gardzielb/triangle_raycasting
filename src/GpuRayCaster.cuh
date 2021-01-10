@@ -16,8 +16,6 @@ private:
 	PaintScene * gpuScene = nullptr;
 	Color * gpuPixels = nullptr;
 	Camera * gpuCamera = nullptr;
-//	LightSourceSet * gpuLightSourceSet = nullptr;
-//	LightSource * gpuLightSources = nullptr;
 	dim3 threadsPerBlock;
 	dim3 blockCount;
 
@@ -42,27 +40,11 @@ public:
 		checkCudaErrors( cudaMemcpy( gpuScene, &tmpScene, sizeof( PaintScene ), cudaMemcpyHostToDevice ) );
 
 		checkCudaErrors( cudaMalloc( (void **) &gpuCamera, sizeof( Camera ) ) );
-
-//		checkCudaErrors( cudaMalloc( (void **) &gpuLightSources, lightSources.count * sizeof( LightSource ) ) );
-//		checkCudaErrors( cudaMemcpy(
-//				gpuLightSources, lightSources.sources, lightSources.count * sizeof( LightSource ),
-//				cudaMemcpyHostToDevice
-//		) );
-
-//		LightSourceSet tmpLightSourceSet( lightSources.count, lightSources.ambientLight );
-//		tmpLightSourceSet.sources = gpuLightSources;
-//		checkCudaErrors( cudaMalloc( (void **) &gpuLightSourceSet, sizeof( LightSourceSet ) ) );
-//		checkCudaErrors(
-//				cudaMemcpy( gpuLightSourceSet, &tmpLightSourceSet, sizeof( LightSourceSet ), cudaMemcpyHostToDevice )
-//		);
 	}
 
 	void paintTriangleMesh( const ScopedPtr<TriangleMesh> & meshPtr, const ScopedPtr<LightSourceSet> & lightPtr,
 							PaintScene & scene, const Camera & camera ) override
 	{
-//		Vector3f sceneCenter = ((-1) * cameraPos).normalized();
-//		std::cout << "Camera position = " << cameraPos << ", scene center = " << sceneCenter << "\n";
-
 		checkCudaErrors( cudaMemcpy( gpuCamera, &camera, sizeof( Camera ), cudaMemcpyHostToDevice ) );
 
 		rayCastingKernel<<<blockCount, threadsPerBlock>>>(
@@ -81,8 +63,6 @@ public:
 
 	~GpuRayCaster()
 	{
-//		cudaFree( gpuLightSourceSet );
-//		cudaFree( gpuLightSources );
 		cudaFree( gpuCamera );
 		cudaFree( gpuScene );
 		cudaFree( gpuPixels );

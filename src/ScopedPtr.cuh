@@ -129,6 +129,7 @@ ScopedPtr<TriangleMesh> makeCpuMeshScopedPtr( const std::list<Vector3f> & vertex
 	return ScopedPtr<TriangleMesh>( mesh, cleanupCommand );
 }
 
+
 ScopedPtr<TriangleMesh> makeGpuMeshScopedPtr( const std::list<Vector3f> & vertexList,
 											  const std::list<Triangle> & triangleList,
 											  const std::list<Color> & colorList )
