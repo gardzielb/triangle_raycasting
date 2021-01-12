@@ -2,9 +2,9 @@
 // Created by bartosz on 12/30/20.
 //
 
-#include "Vector3f.cuh"
+#include "Vector3f.h"
 #include "TriangleMesh.h"
-#include "Camera.cuh"
+#include "Camera.h"
 
 #ifndef TRIANGLE_RAYCASTING_KERNELS_CUH
 #define TRIANGLE_RAYCASTING_KERNELS_CUH

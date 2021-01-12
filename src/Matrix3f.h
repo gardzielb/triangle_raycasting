@@ -2,10 +2,10 @@
 // Created by bartosz on 1/1/21.
 //
 
-#ifndef TRIANGLE_RAYCASTING_MATRIX3F_CUH
-#define TRIANGLE_RAYCASTING_MATRIX3F_CUH
+#ifndef TRIANGLE_RAYCASTING_MATRIX3F_H
+#define TRIANGLE_RAYCASTING_MATRIX3F_H
 
-#include "Vector3f.cuh"
+#include "Vector3f.h"
 
 
 class Matrix3f
@@ -83,4 +83,4 @@ private:
 };
 
 
-#endif //TRIANGLE_RAYCASTING_MATRIX3F_CUH
+#endif //TRIANGLE_RAYCASTING_MATRIX3F_H

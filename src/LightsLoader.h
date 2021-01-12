@@ -5,7 +5,7 @@
 #pragma once
 
 
-#include "ScopedPtr.cuh"
+#include "ScopedPtr.h"
 #include "TriangleMesh.h"
 
 

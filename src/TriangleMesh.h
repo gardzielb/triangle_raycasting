@@ -4,8 +4,8 @@
 #ifndef RAYCASTING_TRIANGLEMESH_H
 #define RAYCASTING_TRIANGLEMESH_H
 
-#include "Vector3f.cuh"
-#include "Color.cuh"
+#include "Vector3f.h"
+#include "Color.h"
 
 
 enum class DestMemoryKind

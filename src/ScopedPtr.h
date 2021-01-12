@@ -2,10 +2,10 @@
 // Created by bartosz on 12/30/20.
 //
 
-#ifndef TRIANGLE_RAYCASTING_SCOPEDPTR_CUH
-#define TRIANGLE_RAYCASTING_SCOPEDPTR_CUH
+#ifndef TRIANGLE_RAYCASTING_SCOPEDPTR_H
+#define TRIANGLE_RAYCASTING_SCOPEDPTR_H
 
-#include "CleanupCommand.cuh"
+#include "CleanupCommand.h"
 #include "dependencies/helper_cuda.h"
 #include "TriangleMesh.h"
 #include <thrust/copy.h>
@@ -165,4 +165,4 @@ ScopedPtr<TriangleMesh> makeGpuMeshScopedPtr( const std::list<Vector3f> & vertex
 }
 
 
-#endif //TRIANGLE_RAYCASTING_SCOPEDPTR_CUH
+#endif //TRIANGLE_RAYCASTING_SCOPEDPTR_H

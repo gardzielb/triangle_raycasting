@@ -5,9 +5,9 @@
 #ifndef RAYCASTING_UTILS_CUH
 #define RAYCASTING_UTILS_CUH
 
-#include "Vector3f.cuh"
+#include "Vector3f.h"
 #include "TriangleMesh.h"
-#include "Camera.cuh"
+#include "Camera.h"
 
 __host__ __device__
 bool rayIntersectsTriangle( const Vector3f & rayOrigin, const Vector3f & rayVector,

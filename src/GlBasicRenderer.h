@@ -8,7 +8,7 @@
 #include "Renderer.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "Camera.cuh"
+#include "Camera.h"
 
 
 class GlBasicRenderer : public Renderer

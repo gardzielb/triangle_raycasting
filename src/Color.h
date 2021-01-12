@@ -2,8 +2,8 @@
 // Created by bartosz on 1/1/21.
 //
 
-#ifndef TRIANGLE_RAYCASTING_COLOR_CUH
-#define TRIANGLE_RAYCASTING_COLOR_CUH
+#ifndef TRIANGLE_RAYCASTING_COLOR_H
+#define TRIANGLE_RAYCASTING_COLOR_H
 
 
 class Color
@@ -84,4 +84,4 @@ inline Color operator*( float a, const Color & color )
 }
 
 
-#endif //TRIANGLE_RAYCASTING_COLOR_CUH
+#endif //TRIANGLE_RAYCASTING_COLOR_H

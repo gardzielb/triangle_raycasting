@@ -7,7 +7,7 @@
 
 #include <fstream>
 #include <list>
-#include "ScopedPtr.cuh"
+#include "ScopedPtr.h"
 
 
 class MeshLoader

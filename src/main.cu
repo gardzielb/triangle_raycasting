@@ -2,8 +2,8 @@
 #include "CpuRayCaster.h"
 #include "IndexMeshLoader.h"
 #include "GlBasicRenderer.h"
-#include "Camera.cuh"
-#include "GpuRayCaster.cuh"
+#include "Camera.h"
+#include "GpuRayCaster.h"
 #include "SimpleLightsLoader.h"
 
 

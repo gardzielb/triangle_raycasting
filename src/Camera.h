@@ -2,11 +2,11 @@
 // Created by bartosz on 12/30/20.
 //
 
-#ifndef TRIANGLE_RAYCASTING_CAMERA_CUH
-#define TRIANGLE_RAYCASTING_CAMERA_CUH
+#ifndef TRIANGLE_RAYCASTING_CAMERA_H
+#define TRIANGLE_RAYCASTING_CAMERA_H
 
 #include <iostream>
-#include "Matrix3f.cuh"
+#include "Matrix3f.h"
 
 enum class Direction
 {
@@ -79,4 +79,4 @@ private:
 };
 
 
-#endif //TRIANGLE_RAYCASTING_CAMERA_CUH
+#endif //TRIANGLE_RAYCASTING_CAMERA_H

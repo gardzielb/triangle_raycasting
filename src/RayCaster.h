@@ -5,9 +5,9 @@
 #ifndef RAYCASTING_RAYCASTER_H
 #define RAYCASTING_RAYCASTER_H
 
-#include "ScopedPtr.cuh"
+#include "ScopedPtr.h"
 #include "TriangleMesh.h"
-#include "Camera.cuh"
+#include "Camera.h"
 
 
 class RayCaster
