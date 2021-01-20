@@ -5,8 +5,6 @@
 #ifndef RAYCASTING_MESHLOADER_H
 #define RAYCASTING_MESHLOADER_H
 
-#include <fstream>
-#include <list>
 #include "ScopedPtr.h"
 
 

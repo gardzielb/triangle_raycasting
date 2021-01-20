@@ -23,7 +23,7 @@ private:
 	Vector3f position, center;
 
 public:
-	Camera( Vector3f center, float rotationRadius, float zoomSpeed, float rotationAngle = M_PI / 72 )
+	Camera( Vector3f center, float rotationRadius, float zoomSpeed, float rotationAngle = M_PI / 36 )
 			: center( std::move( center ) ), rotationRadius( rotationRadius ), zoomSpeed( zoomSpeed ),
 			  rotationAngle( rotationAngle )
 	{

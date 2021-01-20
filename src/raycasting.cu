@@ -62,9 +62,10 @@ __host__ __device__
 Color phongReflectionColor( const Vector3f & point, const Vector3f & cameraPos, const Vector3f & normalVector,
 							const LightSourceSet & lightSources, const Color & color )
 {
-	float ks = 0.33f, kd = 0.33f, ka = 0.33f, alpha = 10.0f;
+	float ambientStrenght = 0.05f;
+	float shininess = 32.0f;
 	Vector3f cameraVector = (cameraPos - point).normalized();
-	Color outColor = ka * lightSources.ambientLight;
+	Color outColor = ambientStrenght * lightSources.ambientLight;
 
 	for ( int i = 0; i < lightSources.count; i++ )
 	{
@@ -73,8 +74,8 @@ Color phongReflectionColor( const Vector3f & point, const Vector3f & cameraPos, 
 		Vector3f reflectionVector = 2 * lnDot * normalVector - lightVector;
 		float rvDot = reflectionVector.dot( cameraVector );
 
-		Color d = kd * lnDot * lightSources[i].diffuseLight;
-		Color s = ks * powf( rvDot, alpha ) * lightSources[i].specularLight;
+		Color d = lnDot * lightSources[i].diffuseLight;
+		Color s = powf( rvDot, shininess ) * lightSources[i].specularLight;
 		outColor += (d + s);
 	}
 

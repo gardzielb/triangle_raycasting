@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "GpuRayCaster.h"
 #include "SimpleLightsLoader.h"
+#include "ObjMeshLoader.h"
 
 
 static DestMemoryKind enumValueOf( const std::string & str )
@@ -27,10 +28,11 @@ int main( int argc, char ** argv )
 	DestMemoryKind kind = enumValueOf( argv[1] );
 	std::string model = argv[2];
 
-	IndexMeshLoader meshLoader(
-			"../models/" + model + "/vertices.txt", "../models/" + model + "/triangles.txt",
-			"../models/" + model + "/colors.txt"
-	);
+//	IndexMeshLoader meshLoader(
+//			"../models/" + model + "/vertices.txt", "../models/" + model + "/triangles.txt",
+//			"../models/" + model + "/colors.txt"
+//	);
+	ObjMeshLoader meshLoader( "../models/" + model + ".obj" );
 	auto meshPtr = meshLoader.loadMesh( kind );
 
 	PaintScene scene;
