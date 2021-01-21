@@ -15,6 +15,8 @@
 #include <numeric>
 
 
+// a custom smart pointer behaving mostly like std::unique_ptr;
+// capable of freeing memory on GPU with proper CleanupCommand
 template<typename T>
 class ScopedPtr
 {
@@ -47,7 +49,8 @@ public:
 };
 
 
-Color computeAmbientLight( const std::list<LightSource> & lightSourceList )
+// utility function for building LightSourceSet
+Color computeAmbientLight( const std::list<LightSource> & lightSourceList, float ambientStrength )
 {
 	Color specularSum, diffuseSum;
 	for ( const LightSource & ls : lightSourceList )
@@ -55,13 +58,13 @@ Color computeAmbientLight( const std::list<LightSource> & lightSourceList )
 		specularSum += ls.specularLight;
 		diffuseSum += ls.diffuseLight;
 	}
-	return (specularSum + diffuseSum) / (2 * lightSourceList.size());
+	return ambientStrength * (specularSum + diffuseSum) / (2 * lightSourceList.size());
 }
 
 
-ScopedPtr<LightSourceSet> makeCpuLightScopedPtr( const std::list<LightSource> & lightSourceList )
+ScopedPtr<LightSourceSet> makeCpuLightScopedPtr( const std::list<LightSource> & lightSourceList, float ambientStrength )
 {
-	Color ambientLight = computeAmbientLight( lightSourceList );
+	Color ambientLight = computeAmbientLight( lightSourceList, ambientStrength );
 	LightSourceSet * lightSourceSet = new LightSourceSet( lightSourceList.size(), ambientLight );
 	lightSourceSet->sources = new LightSource[lightSourceSet->count];
 	std::copy( lightSourceList.begin(), lightSourceList.end(), lightSourceSet->sources );
@@ -76,9 +79,9 @@ ScopedPtr<LightSourceSet> makeCpuLightScopedPtr( const std::list<LightSource> & 
 }
 
 
-ScopedPtr<LightSourceSet> makeGpuLightScopedPtr( const std::list<LightSource> & lightSourceList )
+ScopedPtr<LightSourceSet> makeGpuLightScopedPtr( const std::list<LightSource> & lightSourceList, float ambientStrength )
 {
-	Color ambientLight = computeAmbientLight( lightSourceList );
+	Color ambientLight = computeAmbientLight( lightSourceList, ambientStrength );
 	LightSourceSet tmpLightSourceSet( lightSourceList.size(), ambientLight );
 
 	checkCudaErrors(
@@ -105,21 +108,17 @@ ScopedPtr<LightSourceSet> makeGpuLightScopedPtr( const std::list<LightSource> & 
 
 ScopedPtr<TriangleMesh> makeCpuMeshScopedPtr( const std::list<Vector3f> & vertexList,
 											  const std::list<Triangle> & triangleList,
-											  const std::list<Color> & colorList )
+											  const Color & color, float shininess )
 {
-	TriangleMesh * mesh = new TriangleMesh( triangleList.size() );
+	TriangleMesh * mesh = new TriangleMesh( triangleList.size(), color, shininess );
 	mesh->vertices = new Vector3f[vertexList.size()];
 	std::copy( vertexList.begin(), vertexList.end(), mesh->vertices );
 
 	mesh->triangles = new Triangle[mesh->triangleCount];
 	std::copy( triangleList.begin(), triangleList.end(), mesh->triangles );
 
-	mesh->colors = new Color[mesh->triangleCount];
-	std::copy( colorList.begin(), colorList.end(), mesh->colors );
-
 	CleanupCommand * cleanupCommand = new CompositeCleanupCommand(
 			{
-					new HostCleanupCommand<Color>( mesh->colors, true ),
 					new HostCleanupCommand<Triangle>( mesh->triangles, true ),
 					new HostCleanupCommand<Vector3f>( mesh->vertices, true ),
 					new HostCleanupCommand<TriangleMesh>( mesh, false )
@@ -132,9 +131,9 @@ ScopedPtr<TriangleMesh> makeCpuMeshScopedPtr( const std::list<Vector3f> & vertex
 
 ScopedPtr<TriangleMesh> makeGpuMeshScopedPtr( const std::list<Vector3f> & vertexList,
 											  const std::list<Triangle> & triangleList,
-											  const std::list<Color> & colorList )
+											  const Color & color, float shininess )
 {
-	TriangleMesh tmpMesh( triangleList.size() );
+	TriangleMesh tmpMesh( triangleList.size(), color, shininess );
 
 	checkCudaErrors( cudaMalloc( (void **) &tmpMesh.vertices, vertexList.size() * sizeof( Vector3f ) ) );
 	thrust::device_vector<Vector3f> dv( vertexList.begin(), vertexList.end() );
@@ -144,17 +143,12 @@ ScopedPtr<TriangleMesh> makeGpuMeshScopedPtr( const std::list<Vector3f> & vertex
 	thrust::device_vector<Triangle> tv( triangleList.begin(), triangleList.end() );
 	thrust::copy( tv.begin(), tv.end(), tmpMesh.triangles );
 
-	checkCudaErrors( cudaMalloc( (void **) &tmpMesh.colors, colorList.size() * sizeof( Color ) ) );
-	thrust::device_vector<Color> cv( colorList.begin(), colorList.end() );
-	thrust::copy( cv.begin(), cv.end(), tmpMesh.colors );
-
 	TriangleMesh * mesh = nullptr;
 	checkCudaErrors( cudaMalloc( (void **) &mesh, sizeof( TriangleMesh ) ) );
 	checkCudaErrors( cudaMemcpy( mesh, &tmpMesh, sizeof( TriangleMesh ), cudaMemcpyHostToDevice ) );
 
 	CleanupCommand * cleanupCommand = new CompositeCleanupCommand(
 			{
-					new GpuCleanupCommand<Color>( tmpMesh.colors ),
 					new GpuCleanupCommand<Triangle>( tmpMesh.triangles ),
 					new GpuCleanupCommand<Vector3f>( tmpMesh.vertices ),
 					new GpuCleanupCommand<TriangleMesh>( mesh )

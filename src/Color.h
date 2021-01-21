@@ -6,15 +6,16 @@
 #define TRIANGLE_RAYCASTING_COLOR_H
 
 
+// a utility class representing Color - allows to perform some mathematical vector operations
 class Color
 {
 public:
-	unsigned char red;
-	unsigned char green;
-	unsigned char blue;
+	float red;
+	float green;
+	float blue;
 
 	__host__ __device__
-	inline Color( unsigned char red, unsigned char green, unsigned char blue )
+	inline Color( float red, float green, float blue )
 			: red( red ), green( green ), blue( blue )
 	{}
 
@@ -25,9 +26,9 @@ public:
 	__host__ __device__
 	inline void shrink()
 	{
-		red = min( red, 255 );
-		green = min( green, 255 );
-		blue = min( blue, 255 );
+		red = min( red, 1.0f );
+		green = min( green, 1.0f );
+		blue = min( blue, 1.0f );
 	}
 
 	__host__ __device__

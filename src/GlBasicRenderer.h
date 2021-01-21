@@ -10,7 +10,7 @@
 #include <GLFW/glfw3.h>
 #include "Camera.h"
 
-
+// a class handling rendering the scene with OpenGL
 class GlBasicRenderer : public Renderer
 {
 private:
@@ -36,7 +36,7 @@ public:
 			throw std::runtime_error( "Failed to init GLEW" );
 	}
 
-
+	// renders given scene configurations (basically draws pixels with glDrawPixels)
 	void renderScene( const PaintScene & scene ) override
 	{
 		processInput();
@@ -45,7 +45,7 @@ public:
 		glClear( GL_COLOR_BUFFER_BIT );
 
 		// draw triangle
-		glDrawPixels( scene.width, scene.height, GL_RGB, GL_UNSIGNED_BYTE, scene.pixels );
+		glDrawPixels( scene.width, scene.height, GL_RGB, GL_FLOAT, scene.pixels );
 
 		// swap front and back buffers
 		glfwSwapBuffers( window );

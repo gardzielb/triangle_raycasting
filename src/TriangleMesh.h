@@ -14,6 +14,7 @@ enum class DestMemoryKind
 };
 
 
+// holds indices of the triangle vertices stored in one array in TriangleMesh struct
 struct Triangle
 {
 	int vertices[3];
@@ -26,14 +27,20 @@ struct Triangle
 };
 
 
+// holds array of vertices and triangles, provides some access utilities
 struct TriangleMesh
 {
 	Vector3f * vertices = nullptr;
 	Triangle * triangles = nullptr;
-	Color * colors = nullptr; // one color for each triangle
+	Color color; // one color for each triangle
 	int triangleCount;
+	float shininess;
 
-	TriangleMesh( int triangleCount ) : triangleCount( triangleCount )
+	TriangleMesh( int triangleCount ) : triangleCount( triangleCount ), shininess( 32.0f )
+	{}
+
+	TriangleMesh( int triangleCount, const Color & color, float shininess )
+			: triangleCount( triangleCount ), color( color ), shininess( 32.0f )
 	{}
 
 	TriangleMesh() : TriangleMesh( 0 )
@@ -48,6 +55,7 @@ struct TriangleMesh
 };
 
 
+// utility wrapper for pixel array
 struct PaintScene
 {
 	Color * pixels;
@@ -78,6 +86,7 @@ public:
 };
 
 
+// provides ambient light for the light source set and the access operator
 struct LightSourceSet
 {
 	LightSource * sources = nullptr;

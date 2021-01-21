@@ -9,6 +9,7 @@
 #include "raycasting.cuh"
 
 
+// simple CPU impementation of a RayCaster
 class CpuRayCaster : public RayCaster
 {
 public:

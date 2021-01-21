@@ -10,12 +10,15 @@
 #include <cuda.h>
 
 
+// A GPU implementation of a RayCaster
 class GpuRayCaster : public RayCaster
 {
 private:
+	// pointers to necessary data copies allocated on GPU
 	PaintScene * gpuScene = nullptr;
 	Color * gpuPixels = nullptr;
 	Camera * gpuCamera = nullptr;
+
 	dim3 threadsPerBlock;
 	dim3 blockCount;
 
@@ -42,6 +45,7 @@ public:
 		checkCudaErrors( cudaMalloc( (void **) &gpuCamera, sizeof( Camera ) ) );
 	}
 
+	// calls raycasting kernel to compute pixels values
 	void paintTriangleMesh( const ScopedPtr<TriangleMesh> & meshPtr, const ScopedPtr<LightSourceSet> & lightPtr,
 							PaintScene & scene, const Camera & camera ) override
 	{

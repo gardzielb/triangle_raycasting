@@ -8,6 +8,7 @@
 #include "ScopedPtr.h"
 
 
+// a class loading model from file
 class MeshLoader
 {
 public:

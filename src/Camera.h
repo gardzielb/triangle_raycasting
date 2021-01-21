@@ -14,6 +14,7 @@ enum class Direction
 };
 
 
+// a class representing camera from which perspective rays are cast towards the screen
 class Camera
 {
 private:
@@ -30,6 +31,7 @@ public:
 		updatePosition();
 	}
 
+	// camera can be rotated around the [0,1,0] axis
 	void rotate( Direction dir )
 	{
 		switch ( dir )
@@ -57,6 +59,9 @@ public:
 		return position;
 	}
 
+	// returns a direction of a ray pointing from the camera towards the given point on a screen;
+	// the screen is placed opposite to the camera, so that a ray passing through (0,0,0) is perpendicular to the screen
+	// and points at (0,0) point on the screen
 	__host__ __device__
 	Vector3f emitRay( float x, float y ) const
 	{

@@ -8,7 +8,7 @@
 #include "ScopedPtr.h"
 #include "TriangleMesh.h"
 
-
+// class loading light configuration from file
 class LightsLoader
 {
 public:

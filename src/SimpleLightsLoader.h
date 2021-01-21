@@ -9,6 +9,7 @@
 #include "readFileUtils.h"
 
 
+// loads lights data from text file
 class SimpleLightsLoader : public LightsLoader
 {
 private:
@@ -19,11 +20,16 @@ public:
 			: fileName( fileName )
 	{}
 
+	// expects file with ambientStrength in the first line and light sources data in the following lines
+	// light source data format: <position> s <specular color> d <diffuse color> \n
 	ScopedPtr<LightSourceSet> loadLights( DestMemoryKind memoryKind ) const override
 	{
 		std::list<LightSource> lightSourceList;
 		std::ifstream stream( fileName );
 		std::string line;
+
+		getline( stream, line );
+		float ambientStrength = std::stof( line );
 
 		while ( getline( stream, line ) )
 		{
@@ -37,7 +43,7 @@ public:
 		stream.close();
 
 		if ( memoryKind == DestMemoryKind::CPU )
-			return makeCpuLightScopedPtr( lightSourceList );
-		return makeGpuLightScopedPtr( lightSourceList );
+			return makeCpuLightScopedPtr( lightSourceList, ambientStrength );
+		return makeGpuLightScopedPtr( lightSourceList, ambientStrength );
 	}
 };

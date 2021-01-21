@@ -7,7 +7,7 @@
 
 #include "Vector3f.h"
 
-
+// utility class used for rotation matrix when dealing with a camera
 class Matrix3f
 {
 	static const int rowCount = 3, columnCount = 3;

@@ -5,6 +5,8 @@
 #include "raycasting.cuh"
 
 
+// checks whether ray intersects with given triangle using Möller–Trumbore algorithm
+// returns boolean value and if true, stores intersection in outIntersectionPoint
 __host__ __device__
 bool rayIntersectsTriangle( const Vector3f & rayOrigin, const Vector3f & rayVector,
 							const Vector3f & v0, const Vector3f & v1, const Vector3f & v2,
@@ -41,6 +43,8 @@ bool rayIntersectsTriangle( const Vector3f & rayOrigin, const Vector3f & rayVect
 }
 
 
+// computes normal vector in given point of a given triangle
+// rayOrigin is necessary to choose the normal 'closer' to a camera, not the one pointing inside the model
 __host__ __device__
 Vector3f normalVector( const Vector3f & rayOrigin, const Vector3f & point, int triangleIndex,
 					   const TriangleMesh * mesh )
@@ -58,14 +62,13 @@ Vector3f normalVector( const Vector3f & rayOrigin, const Vector3f & point, int t
 }
 
 
+// computes the pixel color according to Phong reflection model
 __host__ __device__
 Color phongReflectionColor( const Vector3f & point, const Vector3f & cameraPos, const Vector3f & normalVector,
-							const LightSourceSet & lightSources, const Color & color )
+							const LightSourceSet & lightSources, const Color & color, float shininess )
 {
-	float ambientStrenght = 0.05f;
-	float shininess = 32.0f;
 	Vector3f cameraVector = (cameraPos - point).normalized();
-	Color outColor = ambientStrenght * lightSources.ambientLight;
+	Color outColor = lightSources.ambientLight;
 
 	for ( int i = 0; i < lightSources.count; i++ )
 	{
@@ -80,10 +83,11 @@ Color phongReflectionColor( const Vector3f & point, const Vector3f & cameraPos, 
 	}
 
 	outColor.shrink();
-	return (1.0f / 255) * color * outColor;
+	return color * outColor;
 }
 
 
+// performs raycasting using naive linear algorithm searching all the triangles
 __host__ __device__
 void doRayCasting( int x, int y, const TriangleMesh * mesh, PaintScene * scene, const Camera & camera,
 				   const LightSourceSet & lightSources )
@@ -107,6 +111,7 @@ void doRayCasting( int x, int y, const TriangleMesh * mesh, PaintScene * scene, 
 		);
 		if ( !isHit ) continue;
 
+		// search for the closest intersection
 		float dist = intersection.distance( camera.getPosition() );
 		if ( dist < minDist )
 		{
@@ -116,11 +121,12 @@ void doRayCasting( int x, int y, const TriangleMesh * mesh, PaintScene * scene, 
 		}
 	}
 
+	// compute color only once for the closest intersection if any found
 	if ( triangleIndex >= 0 )
 	{
 		Vector3f vNormal = normalVector( camera.getPosition(), closestIntersection, triangleIndex, mesh );
 		Color color = phongReflectionColor(
-				closestIntersection, camera.getPosition(), vNormal, lightSources, mesh->colors[triangleIndex]
+				closestIntersection, camera.getPosition(), vNormal, lightSources, mesh->color, mesh->shininess
 		);
 		scene->setPixel( x, y, color );
 	}

@@ -8,6 +8,7 @@
 #include <ostream>
 
 
+// utility class representing vector consisting of 3 floats
 class Vector3f
 {
 public:

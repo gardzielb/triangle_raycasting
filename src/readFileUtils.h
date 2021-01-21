@@ -6,6 +6,8 @@
 
 #include "TriangleMesh.h"
 
+// utility function for reading some primitives from text files;
+// used for loading lights
 
 static Color readColor( const std::string & line )
 {
@@ -13,16 +15,16 @@ static Color readColor( const std::string & line )
 	if ( space1 == std::string::npos )
 		throw std::runtime_error( "Invalid line" );
 	std::string rStr = line.substr( 0, space1 );
-	unsigned char r = std::stoi( rStr );
+	float r = std::stof( rStr );
 
 	int space2 = line.find( ' ', space1 + 1 );
 	if ( space2 == std::string::npos )
 		throw std::runtime_error( "Invalid line" );
 	std::string gStr = line.substr( space1 + 1, space2 );
-	unsigned char g = std::stoi( gStr );
+	float g = std::stof( gStr );
 
 	std::string bStr = line.substr( space2 + 1 );
-	unsigned char b = std::stoi( bStr );
+	float b = std::stof( bStr );
 
 	return Color( r, g, b );
 }
