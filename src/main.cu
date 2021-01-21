@@ -6,6 +6,7 @@
 #include "SimpleLightsLoader.h"
 #include "ObjMeshLoader.h"
 #include "readFileUtils.h"
+#include "FpsController.h"
 
 
 static DestMemoryKind enumValueOf( const std::string & str )
@@ -46,10 +47,14 @@ int main( int argc, char ** argv )
 	Camera camera( Vector3f( 0.0f, 0.0f, 0.0f ), 3.0f, 0.5f );
 	GlBasicRenderer renderer( width, height, "Raycasting", camera );
 
+	FpsController fpsController;
+
 	while ( renderer.isAlive() )
 	{
+		fpsController.startTimer();
 		rayCaster->paintTriangleMesh( meshPtr, lightsPtr, scene, camera );
 		renderer.renderScene( scene );
+		std::cout << fpsController.computeFPS() << "\n";
 	}
 
 	delete rayCaster;
